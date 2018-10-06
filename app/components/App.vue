@@ -14,7 +14,7 @@
                     <Label class="message bold" :text="msg" col="0" row="0" />
 
                     <!-- BUS STOP CODE TEXTFIELD -->
-                    <Textfield v-model="stopid" @textChange="getBusStop" @blur="__debug" />
+                    <Textfield v-model="stopid" @textChange="getBusStop" @blur="logHistory" />
 
                     <PullToRefresh @refresh="refreshList">
                         <ListView class="list-group" for="bus in data.services" style="height:1250px" @itemTap="toast_info">
@@ -53,7 +53,7 @@
                             <FlexboxLayout flexDirection="row" class="list-group-item">
 
                                 <!-- DISPLAY BUS NUMVER -->
-                                <Label :text="busstop" class="list-group-item-heading bold" style="width: 60%" />
+                                <Label :text="busstop" class="list-group-item-heading" style="width: 60%" />
 
                             </FlexboxLayout>
                         </v-template>
@@ -78,11 +78,11 @@
                 msg: 'Enter bus stop code',
                 stopid: 27301,
                 data: [],
-                appversion: "v1.5.0",
+                appversion: "v1.5.0r2",
                 development: "",
                 buttontext: "Update Bus Stop",
-                busstophistory: [],
                 latestversion: "",
+                busstophistory: []
             }
         },
         methods: {
@@ -117,14 +117,30 @@
                 setTimeout(function () {
                     pullRefresh.refreshing = false;
                 }, 200);
+
+                this.getLatestVersion()
             },
 
-            __debug(){
-               this.busstophistory.push(this.stopid)
-            },
-            
-            openUpdate(){
+            openUpdate() {
                 utilsModule.openUrl("https://github.com/bynabil/nativescript-bustiming/releases")
+            },
+
+            getLatestVersion() {
+                fetch("https://api.github.com/repos/bynabil/nativescript-bustiming/releases")
+                    .then(response => response.json())
+                    .then(json => {
+                        this.latestversion = json[0].tag_name
+                        if (this.appversion !== this.latestversion) {
+                            this.updateMessage = "Update the app now! Latest version: " + this.latestversion
+
+                        } else {
+                            this.updateMessage = "";
+                        }
+                    })
+            },
+
+            logHistory() {
+                this.busstophistory.push(this.stopid)
             }
 
         },
@@ -138,18 +154,16 @@
                 })
 
             fetch("https://api.github.com/repos/bynabil/nativescript-bustiming/releases")
-            .then(response => response.json())
-            .then(json => {
-                this.latestversion = json[0].tag_name
-                if(this.appversion !== this.latestversion){
-                    this.updateMessage = "Update the app now! Latest version: " + this.latestversion
-                    this.updateMessage.set("visibility" , "visible")
+                .then(response => response.json())
+                .then(json => {
+                    this.latestversion = json[0].tag_name
+                    if (this.appversion !== this.latestversion) {
+                        this.updateMessage = "Update the app now! Latest version: " + this.latestversion
 
-                }else{
-                    this.updateMessage = "";
-                    this.updateMessage.set("visibility" , "collapsed")
-                }
-            })
+                    } else {
+                        this.updateMessage = "";
+                    }
+                })
         }
     }
 </script>
@@ -187,7 +201,7 @@
         padding: 10;
     }
 
-    .alert{
+    .alert {
         /* background-color: #ba5353; */
         color: #ba5353;
         text-align: center;
