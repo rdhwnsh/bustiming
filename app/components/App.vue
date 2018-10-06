@@ -2,69 +2,97 @@
     <Page>
 
 
-        <ActionBar title="dev.bynabil.bustimingapp" />
-        <StackLayout colums="*" rows="*">
+        <ActionBar title="bustimings" />
 
-            <Label class="message bold" :text="msg" col="0" row="0" />
-            <Label>Version: {{appversion}}</Label>
-            <Label>Development Mode?: {{development}}</Label>
-            <Label text="Click on any bus timing to know type of the bus" />
-            <Label text="Pull to refresh (below at the bus stop numbers)" />
-            <Label :text="autoRefreshMode" />
+        <TabView tabBackgroundColor="#53ba82" androidTabsPosition="top">
 
-            <!-- BUS STOP CODE TEXTFIELD -->
-            <Textfield v-model="stopid" />
+            <!-- TABVIEW ITEM 1 -->
+            <TabViewItem title="Home">
+                <StackLayout class="addmargin">
 
-            <!-- GET BUS STOP BUTTON -->
-            <Button @tap="getBusStop">{{buttontext}}</Button>
+                    <Label class="message alert" textWrap="true" :text="updateMessage" col="0" row="0" @tap="openUpdate" />
+                    <Label class="message bold" :text="msg" col="0" row="0" />
 
-            <PullToRefresh @refresh="refreshList">
-                <ListView class="list-group" for="bus in data.services" style="height:1250px" @itemTap="toast_info">
-                    <v-template>
-                        <FlexboxLayout flexDirection="row" class="list-group-item">
+                    <!-- BUS STOP CODE TEXTFIELD -->
+                    <Textfield v-model="stopid" @textChange="getBusStop" @blur="__debug" />
 
-                            <!-- DISPLAY BUS NUMVER -->
-                            <Label :text="bus.no" class="list-group-item-heading bold" style="width: 60%" />
+                    <PullToRefresh @refresh="refreshList">
+                        <ListView class="list-group" for="bus in data.services" style="height:1250px" @itemTap="toast_info">
+                            <v-template>
+                                <FlexboxLayout flexDirection="row" class="list-group-item">
 
-                            <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
-                            <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.next.duration_ms
-                                /60000)}} Mins </Label>
+                                    <!-- DISPLAY BUS NUMVER -->
+                                    <Label :text="bus.no" class="list-group-item-heading bold" style="width: 60%" />
 
-                            <!-- DISPLAYS SUBSEQUENT BUS TIMING IN MINS -->
-                            <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms
-                                / 60000)}} Mins </Label>
+                                    <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
+                                    <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.next.duration_ms
+                                        /60000)}} Mins </Label>
 
-                        </FlexboxLayout>
-                    </v-template>
-                </ListView>
-            </PullToRefresh>
+                                    <!-- DISPLAYS SUBSEQUENT BUS TIMING IN MINS -->
+                                    <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms
+                                        / 60000)}} Mins </Label>
 
-        </StackLayout>
+                                </FlexboxLayout>
+                            </v-template>
+                        </ListView>
+                    </PullToRefresh>
+
+                </StackLayout>
+            </TabViewItem>
+
+            <!-- IDK PAGE -->
+            <TabViewItem title="info">
+                <StackLayout>
+
+                    <Label>Version: {{appversion}}</Label>
+                    <Label>Latest Version: {{latestversion}}</Label>
+                    <Label>Development Mode?: {{development}}</Label>
+
+                    <ListView class="list-group" for="busstop in busstophistory" style="height:1250px" @itemTap="toast_info">
+                        <v-template>
+                            <FlexboxLayout flexDirection="row" class="list-group-item">
+
+                                <!-- DISPLAY BUS NUMVER -->
+                                <Label :text="busstop" class="list-group-item-heading bold" style="width: 60%" />
+
+                            </FlexboxLayout>
+                        </v-template>
+                    </ListView>
+
+                </StackLayout>
+            </TabViewItem>
+
+        </TabView>
+
+
     </Page>
 </template>
 
 <script>
     var Toast = require("nativescript-toast");
-    const timerModule = require("tns-core-modules/timer");
+    var utilsModule = require("tns-core-modules/utils/utils");
+
     export default {
         data() {
             return {
                 msg: 'Enter bus stop code',
                 stopid: 27301,
                 data: [],
-                appversion: "1.3.0",
+                appversion: "v1.5.0",
                 development: "",
                 buttontext: "Update Bus Stop",
+                busstophistory: [],
+                latestversion: "",
             }
         },
         methods: {
+
             getBusStop() {
                 fetch("https://arrivelah.herokuapp.com/?id=" + this.stopid)
                     .then(response => response.json())
                     .then(json => {
                         this.data = json
                     })
-
             },
             toast_info(args) {
                 let data = this.data;
@@ -84,14 +112,20 @@
             },
 
             refreshList(args) {
-
-
-                var pullRefresh = args.object;
                 this.getBusStop()
+                var pullRefresh = args.object;
                 setTimeout(function () {
                     pullRefresh.refreshing = false;
-                }, 1000);
+                }, 200);
             },
+
+            __debug(){
+               this.busstophistory.push(this.stopid)
+            },
+            
+            openUpdate(){
+                utilsModule.openUrl("https://github.com/bynabil/nativescript-bustiming/releases")
+            }
 
         },
 
@@ -102,14 +136,28 @@
                 .then(json => {
                     this.data = json
                 })
+
+            fetch("https://api.github.com/repos/bynabil/nativescript-bustiming/releases")
+            .then(response => response.json())
+            .then(json => {
+                this.latestversion = json[0].tag_name
+                if(this.appversion !== this.latestversion){
+                    this.updateMessage = "Update the app now! Latest version: " + this.latestversion
+                    this.updateMessage.set("visibility" , "visible")
+
+                }else{
+                    this.updateMessage = "";
+                    this.updateMessage.set("visibility" , "collapsed")
+                }
+            })
         }
     }
 </script>
 
 <style scoped>
     StackLayout {
-        width: 90%;
-        height: 90%;
+        width: 90;
+        height: 90;
     }
 
     ActionBar {
@@ -137,5 +185,11 @@
         background-color: #53ba82;
         color: #ffffff;
         padding: 10;
+    }
+
+    .alert{
+        /* background-color: #ba5353; */
+        color: #ba5353;
+        text-align: center;
     }
 </style>
