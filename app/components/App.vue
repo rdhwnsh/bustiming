@@ -4,12 +4,15 @@
         <StackLayout colums="*" rows="*">
 
             <Label class="message bold" :text="msg" col="0" row="0" />
+            <Label>Version: {{appversion}}</Label>
+            <Label>Development Mode?: {{development}}</Label>
+            <Label text="Click on any bus timing to know type of the bus" />
 
             <Textfield v-model="stopid" />
 
             <Button @tap="getBusStop">Get Timings</Button>
 
-            <ListView class="list-group" for="bus in data.services" style="height:1250px">
+            <ListView class="list-group" for="bus in data.services" style="height:1250px" @itemTap="toast_info">
                 <v-template>
                     <FlexboxLayout flexDirection="row" class="list-group-item">
 
@@ -17,12 +20,12 @@
                         <Label :text="bus.no" class="list-group-item-heading bold" style="width: 60%" />
 
                         <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
-                        <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.next.duration_ms /60000)}} Mins </Label>
-                        <Label class="list-group-item-heading" style="width: 60%">{{bus.next.type}}</Label>
+                        <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.next.duration_ms
+                            /60000)}} Mins </Label>
 
                         <!-- DISPLAYS SUBSEQUENT BUS TIMING IN MINS -->
-                        <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms / 60000)}} Mins </Label>
-                        <Label class="list-group-item-heading" style="width: 60%">{{bus.subsequent.type}} </Label>
+                        <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms
+                            / 60000)}} Mins </Label>
 
                     </FlexboxLayout>
                 </v-template>
@@ -34,12 +37,16 @@
 </template>
 
 <script>
+    var Toast = require("nativescript-toast");
+
     export default {
         data() {
             return {
                 msg: 'Enter bus stop code',
                 stopid: 27301,
-                data: []
+                data: [],
+                appversion: "1.1.0",
+                development: this.development_mode()
             }
         },
         methods: {
@@ -49,10 +56,23 @@
                     .then(json => {
                         this.data = json
                     })
+            },
+            toast_info(args) {
+                let data = this.data;
+                console.log(args.index);
+                Toast.makeText("Next: " + data.services[args.index].next.type, "short").show()
+
+            },
+            development_mode() {
+                Toast.makeText("THIS APP IS UNDER DEVELOPMENT", "long").show()
+                return true;
             }
         },
 
         created() {
+
+            this.development_mode()
+
             fetch("https://arrivelah.herokuapp.com/?id=" + this.stopid)
                 .then(response => response.json())
                 .then(json => {
@@ -63,6 +83,11 @@
 </script>
 
 <style scoped>
+    StackLayout {
+        width: 90%;
+        height: 90%;
+    }
+
     ActionBar {
         background-color: #53ba82;
         color: #ffffff;
