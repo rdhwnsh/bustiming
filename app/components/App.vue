@@ -46,7 +46,7 @@
                 msg: 'Enter bus stop code',
                 stopid: 27301,
                 data: [],
-                appversion: "1.1.0",
+                appversion: "1.2.0",
                 development: this.development_mode(),
                 buttontext: "Get Timings"
             }
