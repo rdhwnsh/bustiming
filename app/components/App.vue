@@ -8,9 +8,10 @@
             <Label>Development Mode?: {{development}}</Label>
             <Label text="Click on any bus timing to know type of the bus" />
 
+            <!-- BUS STOP CODE TEXTFIELD -->
             <Textfield v-model="stopid" />
 
-            <Button @tap="getBusStop">Get Timings</Button>
+            <Button @tap="getBusStop">{{buttontext}}</Button>
 
             <ListView class="list-group" for="bus in data.services" style="height:1250px" @itemTap="toast_info">
                 <v-template>
@@ -46,7 +47,8 @@
                 stopid: 27301,
                 data: [],
                 appversion: "1.1.0",
-                development: this.development_mode()
+                development: this.development_mode(),
+                buttontext: "Get Timings"
             }
         },
         methods: {
@@ -55,18 +57,26 @@
                     .then(response => response.json())
                     .then(json => {
                         this.data = json
+                        this.buttontext = "Refresh Timings"
                     })
             },
             toast_info(args) {
                 let data = this.data;
                 console.log(args.index);
-                Toast.makeText("Next: " + data.services[args.index].next.type, "short").show()
+
+                if(data.services[args.index].next.type == "DD"){
+                    Toast.makeText("Next bus is double deck", "short").show()
+                }else{
+                    Toast.makeText("Next bus is single deck", "short").show()
+                }
+                
 
             },
             development_mode() {
                 Toast.makeText("THIS APP IS UNDER DEVELOPMENT", "long").show()
                 return true;
-            }
+            },
+
         },
 
         created() {
