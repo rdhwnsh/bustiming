@@ -1,5 +1,4 @@
-# NativeScript-Vue Application
-
+# nativescript-bustiming
 > bustiming-app with nativescript and vue
 
 ## Usage
@@ -16,4 +15,7 @@ tns debug <platform> --bundle
 
 # Build, watch for changes and run the application
 tns run <platform> --bundle
+
+# Example
+tns run android --device emulator-name-here//check-using-the-adb_devices-command --bundle
 ```
