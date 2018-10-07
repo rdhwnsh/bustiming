@@ -228,18 +228,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var Toast = __webpack_require__("../node_modules/nativescript-toast/toast.js");
 
 var utilsModule = __webpack_require__("../node_modules/tns-core-modules/utils/utils.js");
+
+const timerModule = __webpack_require__("../node_modules/tns-core-modules/timer/timer.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data() {
     return {
       stopid: 27301,
       data: [],
-      appversion: "v1.6.1",
+      appversion: "v1.7.0",
       buttontext: "Update Bus Stop",
-      latestversion: ""
+      latestversion: "",
+      intervaltime: 10000
     };
   },
 
@@ -247,6 +251,7 @@ var utilsModule = __webpack_require__("../node_modules/tns-core-modules/utils/ut
     getBusStop() {
       fetch("https://arrivelah.herokuapp.com/?id=" + this.stopid).then(response => response.json()).then(json => {
         this.data = json;
+        console.log("getbusstop called");
       });
     },
 
@@ -290,6 +295,9 @@ var utilsModule = __webpack_require__("../node_modules/tns-core-modules/utils/ut
 
   mounted() {
     this.getBusStop();
+    setInterval(() => {
+      this.getBusStop();
+    }, this.intervaltime);
     this.getLatestVersion();
   }
 
@@ -533,6 +541,13 @@ var render = function() {
                   _c("Label", [_vm._v("Version: " + _vm._s(_vm.appversion))]),
                   _c("Label", [
                     _vm._v("Latest Version: " + _vm._s(_vm.latestversion))
+                  ]),
+                  _c("Label", [
+                    _vm._v(
+                      "Auto Refresh Interval: " +
+                        _vm._s(_vm.intervaltime / 1000) +
+                        " seconds"
+                    )
                   ])
                 ],
                 1

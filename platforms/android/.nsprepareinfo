@@ -1,5 +1,5 @@
 {
-	"time": "Sun Oct 07 2018 19:09:32 GMT+0800 (Malay Peninsula Standard Time)",
+	"time": "Sun Oct 07 2018 19:43:57 GMT+0800 (Malay Peninsula Standard Time)",
 	"nativePlatformStatus": "3",
 	"bundle": true,
 	"release": false,
@@ -9,7 +9,7 @@
 	"appFilesHashes": {
 		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\fonts\\.gitkeep": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
 		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\app.scss": "fe296de860375c98c53a8780b07351f07321835c",
-		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\components\\App.vue": "0f60b162b934358922dfd5e2250cfa63f59bbb46",
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\components\\App.vue": "fbbaa75693d1543f74c064fd9d35b46fa5cb73c0",
 		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\assets\\images\\NativeScript-Vue.png": "31f09bdba72293198ee2e2a83c4fe5aa5744bc3d",
 		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\main.js": "9d2baecf88854815556457277bb31925333e2f6e",
 		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\app\\package.json": "8ad71c4c20a4d9967a448ab757220df155b6c52d"

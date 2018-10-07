@@ -44,7 +44,7 @@
                                     <StackLayout v-else>
                                         <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
                                         <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms
-                                        / 60000)}} Mins </Label>
+                                            / 60000)}} Mins </Label>
                                     </StackLayout>
                                 </FlexboxLayout>
                             </v-template>
@@ -57,9 +57,10 @@
             <!-- IDK PAGE -->
             <TabViewItem title="info">
                 <StackLayout>
-                    
+
                     <Label>Version: {{appversion}}</Label>
                     <Label>Latest Version: {{latestversion}}</Label>
+                    <Label>Auto Refresh Interval: {{intervaltime / 1000}} seconds</Label>
 
                 </StackLayout>
             </TabViewItem>
@@ -73,15 +74,17 @@
 <script>
     var Toast = require("nativescript-toast");
     var utilsModule = require("tns-core-modules/utils/utils");
+    const timerModule = require("tns-core-modules/timer");
 
     export default {
         data() {
             return {
                 stopid: 27301,
                 data: [],
-                appversion: "v1.6.1",
+                appversion: "v1.7.0",
                 buttontext: "Update Bus Stop",
                 latestversion: "",
+                intervaltime: 10000
             }
         },
         methods: {
@@ -91,6 +94,7 @@
                     .then(response => response.json())
                     .then(json => {
                         this.data = json
+                        console.log("getbusstop called")
                     })
             },
             toast_info(args) {
@@ -116,7 +120,9 @@
             },
 
             openUpdate() {
-                utilsModule.openUrl("https://github.com/ridhwanshah/bustiming/blob/master/platforms/android/app/build/outputs/apk/debug/app-debug.apk?raw=true")
+                utilsModule.openUrl(
+                    "https://github.com/ridhwanshah/bustiming/blob/master/platforms/android/app/build/outputs/apk/debug/app-debug.apk?raw=true"
+                )
             },
 
             getLatestVersion() {
@@ -137,6 +143,9 @@
 
         mounted() {
             this.getBusStop()
+            setInterval(() => {
+                this.getBusStop()
+            }, this.intervaltime)
             this.getLatestVersion();
 
         }
