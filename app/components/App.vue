@@ -4,7 +4,7 @@
 
         <ActionBar title="bustimings" />
 
-        <TabView tabBackgroundColor="#53ba82" androidTabsPosition="top">
+        <TabView tabBackgroundColor="#53ba82" androidTabsPosition="bottom">
 
             <!-- TABVIEW ITEM 1 -->
             <TabViewItem title="Home">
@@ -57,7 +57,7 @@
             <!-- IDK PAGE -->
             <TabViewItem title="info">
                 <StackLayout>
-
+                    
                     <Label>Version: {{appversion}}</Label>
                     <Label>Latest Version: {{latestversion}}</Label>
 
@@ -79,7 +79,7 @@
             return {
                 stopid: 27301,
                 data: [],
-                appversion: "v1.5.0r2",
+                appversion: "v1.6.0",
                 buttontext: "Update Bus Stop",
                 latestversion: "",
             }
