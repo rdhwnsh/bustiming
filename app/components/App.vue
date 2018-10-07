@@ -8,15 +8,15 @@
 
             <!-- TABVIEW ITEM 1 -->
             <TabViewItem title="Home">
-                <StackLayout class="addmargin">
+                <PullToRefresh @refresh="refreshList">
+                    <StackLayout class="addmargin">
 
-                    <Label class="message alert" textWrap="true" :text="updateMessage" col="0" row="0" @tap="openUpdate" />
-                    <Label class="message bold" :text="msg" col="0" row="0" />
+                        <Label class="message alert" textWrap="true" :text="updateMessage" col="0" row="0" @tap="openUpdate" />
+                        <Label class="message bold" col="0" row="0">Bus Stop Code</Label>
 
-                    <!-- BUS STOP CODE TEXTFIELD -->
-                    <Textfield v-model="stopid" @textChange="getBusStop" @blur="logHistory" />
+                        <!-- BUS STOP CODE TEXTFIELD -->
+                        <Textfield v-model="stopid" @textChange="getBusStop" />
 
-                    <PullToRefresh @refresh="refreshList">
                         <ListView class="list-group" for="bus in data.services" style="height:1250px" @itemTap="toast_info">
                             <v-template>
                                 <FlexboxLayout flexDirection="row" class="list-group-item">
@@ -24,20 +24,34 @@
                                     <!-- DISPLAY BUS NUMVER -->
                                     <Label :text="bus.no" class="list-group-item-heading bold" style="width: 60%" />
 
-                                    <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
-                                    <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.next.duration_ms
-                                        /60000)}} Mins </Label>
+                                    <StackLayout v-if="Math.floor(bus.next.duration_ms/60000) <= 1">
+                                        <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
+                                        <Label class="list-group-item-heading" style="width: 60%">Arr</Label>
+                                    </StackLayout>
 
-                                    <!-- DISPLAYS SUBSEQUENT BUS TIMING IN MINS -->
-                                    <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms
+                                    <StackLayout v-else>
+                                        <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
+                                        <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.next.duration_ms
+                                            /60000)}} Mins </Label>
+                                    </StackLayout>
+
+                                    <!-- Subsequent bus -->
+                                    <StackLayout v-if="Math.floor(bus.subsequent.duration_ms/ 60000) <= 1">
+                                        <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
+                                        <Label class="list-group-item-heading" style="width: 60%">Arr</Label>
+                                    </StackLayout>
+
+                                    <StackLayout v-else>
+                                        <!-- DISPLAYS FIRST BUS TIMING IN MINS -->
+                                        <Label class="list-group-item-heading" style="width: 60%">{{Math.floor(bus.subsequent.duration_ms
                                         / 60000)}} Mins </Label>
-
+                                    </StackLayout>
                                 </FlexboxLayout>
                             </v-template>
                         </ListView>
-                    </PullToRefresh>
 
-                </StackLayout>
+                    </StackLayout>
+                </PullToRefresh>
             </TabViewItem>
 
             <!-- IDK PAGE -->
@@ -46,18 +60,6 @@
 
                     <Label>Version: {{appversion}}</Label>
                     <Label>Latest Version: {{latestversion}}</Label>
-                    <Label>Development Mode?: {{development}}</Label>
-
-                    <ListView class="list-group" for="busstop in busstophistory" style="height:1250px" @itemTap="toast_info">
-                        <v-template>
-                            <FlexboxLayout flexDirection="row" class="list-group-item">
-
-                                <!-- DISPLAY BUS NUMVER -->
-                                <Label :text="busstop" class="list-group-item-heading" style="width: 60%" />
-
-                            </FlexboxLayout>
-                        </v-template>
-                    </ListView>
 
                 </StackLayout>
             </TabViewItem>
@@ -75,14 +77,11 @@
     export default {
         data() {
             return {
-                msg: 'Enter bus stop code',
                 stopid: 27301,
                 data: [],
                 appversion: "v1.5.0r2",
-                development: "",
                 buttontext: "Update Bus Stop",
                 latestversion: "",
-                busstophistory: []
             }
         },
         methods: {
@@ -106,11 +105,6 @@
 
 
             },
-            development_mode(bool) {
-                Toast.makeText("THIS APP IS UNDER DEVELOPMENT", "long").show()
-                return bool;
-            },
-
             refreshList(args) {
                 this.getBusStop()
                 var pullRefresh = args.object;
@@ -139,39 +133,20 @@
                     })
             },
 
-            logHistory() {
-                this.busstophistory.push(this.stopid)
-            }
-
         },
 
-        created() {
-            this.development = this.development_mode(false)
-            fetch("https://arrivelah.herokuapp.com/?id=" + this.stopid)
-                .then(response => response.json())
-                .then(json => {
-                    this.data = json
-                })
+        mounted() {
+            this.getBusStop()
+            this.getLatestVersion();
 
-            fetch("https://api.github.com/repos/bynabil/nativescript-bustiming/releases")
-                .then(response => response.json())
-                .then(json => {
-                    this.latestversion = json[0].tag_name
-                    if (this.appversion !== this.latestversion) {
-                        this.updateMessage = "Update the app now! Latest version: " + this.latestversion
-
-                    } else {
-                        this.updateMessage = "";
-                    }
-                })
         }
     }
 </script>
 
 <style scoped>
-    StackLayout {
-        width: 90;
-        height: 90;
+    TabViewItem {
+        width: 90%;
+        height: 90%;
     }
 
     ActionBar {
