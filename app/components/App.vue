@@ -79,7 +79,7 @@
             return {
                 stopid: 27301,
                 data: [],
-                appversion: "v1.6.0",
+                appversion: "v1.6.1",
                 buttontext: "Update Bus Stop",
                 latestversion: "",
             }
