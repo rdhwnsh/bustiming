@@ -116,11 +116,11 @@
             },
 
             openUpdate() {
-                utilsModule.openUrl("https://github.com/bynabil/nativescript-bustiming/releases")
+                utilsModule.openUrl("https://github.com/ridhwanshah/bustiming/blob/master/platforms/android/app/build/outputs/apk/debug/app-debug.apk?raw=true")
             },
 
             getLatestVersion() {
-                fetch("https://api.github.com/repos/bynabil/nativescript-bustiming/releases")
+                fetch("https://api.github.com/repos/ridhwanshah/bustiming/releases")
                     .then(response => response.json())
                     .then(json => {
                         this.latestversion = json[0].tag_name
