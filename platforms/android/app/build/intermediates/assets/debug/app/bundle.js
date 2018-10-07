@@ -237,7 +237,7 @@ var utilsModule = __webpack_require__("../node_modules/tns-core-modules/utils/ut
     return {
       stopid: 27301,
       data: [],
-      appversion: "v1.6.0",
+      appversion: "v1.6.1",
       buttontext: "Update Bus Stop",
       latestversion: ""
     };
