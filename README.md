@@ -1,4 +1,4 @@
-# nativescript-bustiming (now known as bustming)
+# nativescript-bustiming (now known as bustiming)
 > bustiming-app with nativescript and vue
 
 ## Download

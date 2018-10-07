@@ -1,0 +1,14 @@
+{
+	"nativescript-socket.io": {
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\node_modules\\nativescript-socket.io\\platforms\\android\\AndroidManifest.xml": "9741d925308f7277734e46001e8dc12b4e0c2529",
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\node_modules\\nativescript-socket.io\\platforms\\android\\include.gradle": "027b30edeb6741f0b8f0c2bbafbfea69ce6ae1e2"
+	},
+	"nativescript-vibrate": {
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\node_modules\\nativescript-vibrate\\platforms\\android\\README.md": "45f2f63427be0a461a7e2dfd5ff0ad5bab64068f",
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\node_modules\\nativescript-vibrate\\platforms\\android\\nativescript_vibrate.aar": "31bc4bfd8ba4c2caa17b12b63f51bed004caa1d1",
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\node_modules\\nativescript-vibrate\\platforms\\android\\include.gradle": "4945565d2e438104a7124474e0975db3692b0b02"
+	},
+	"tns-core-modules-widgets": {
+		"C:\\Users\\ridhwanshah\\Documents\\GitHub\\nativescript-bustiming\\node_modules\\tns-core-modules-widgets\\platforms\\android\\widgets-release.aar": "402875596039fd16198e0e4adbb85e44a4ff148d"
+	}
+}
